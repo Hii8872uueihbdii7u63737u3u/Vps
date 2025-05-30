@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 # Install Node.js and npm
 RUN apt-get update && apt-get install -y \
     curl \
+    gnupg \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \
@@ -14,8 +15,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (omit dev dependencies)
+RUN npm install --omit=dev
 
 # Copy application code
 COPY . .
